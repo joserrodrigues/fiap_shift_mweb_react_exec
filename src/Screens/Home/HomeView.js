@@ -3,6 +3,7 @@ import './Home.css'
 import { Box, Container, CircularProgress, Grid, Typography, Button } from '@mui/material';
 import ItemsView from '../../Components/ItemsView/ItemsView';
 import TopCards from '../../Components/TopCards/TopCards';
+import Header from '../../Components/Header/Header';
 
 export default function HomeView({ loading, arrayToys, goToPage }) {
 
@@ -19,6 +20,7 @@ export default function HomeView({ loading, arrayToys, goToPage }) {
     }
     return (
         <Container fixed className="container" maxWidth="lg">
+            <Header />
             <Box className="contentBox">
                 <Grid
                     container

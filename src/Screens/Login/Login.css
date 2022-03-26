@@ -52,15 +52,6 @@
 .buttonGoogleDiv{
     text-align: center;
 }
-
-.boxButton{
-    text-align: center;
-}
-
 .MuiFormControl-root{
     width: 100%;
-}
-
-.circularProgress{
-    margin-top: 15px;
 }
