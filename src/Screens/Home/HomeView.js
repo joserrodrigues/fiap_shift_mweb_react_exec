@@ -1,8 +1,8 @@
 import * as React from 'react';
 import './Home.css'
 import { Box, Container, CircularProgress, Grid, Typography, Button } from '@mui/material';
-import { Card, CardContent, CardMedia } from '@mui/material';
-import CardInfo from '../../Components/CardInfo/CardInfo'
+import ItemsView from '../../Components/ItemsView/ItemsView';
+import TopCards from '../../Components/TopCards/TopCards';
 
 export default function HomeView({ loading, arrayToys, goToPage }) {
 
@@ -13,29 +13,9 @@ export default function HomeView({ loading, arrayToys, goToPage }) {
             <Grid key={1} item lg={12} xl={12} className="itemClass">
                 <CircularProgress />
             </Grid>
-
         )
     } else if (arrayToys) {
-        arrayToys.toys.forEach(toy => {
-            infoBox.push(
-                <Grid key={toy._id} item sm={12} md={6} lg={2} xl={2} className="itemClass" onClick={() => goToPage(toy)}>
-                    <Card className='cardClass'>
-                        <CardMedia
-                            component="img"
-                            height="140"
-                            src={toy.mainImage}
-                            alt={toy.name}
-                        />
-                        <CardContent>
-                            <Typography gutterBottom variant="body2" component="div" className='titleCard'>
-                                {toy.name}
-                            </Typography>
-                            <CardInfo />
-                        </CardContent>
-                    </Card>
-                </Grid>
-            )
-        });
+        infoBox.push(<ItemsView key={2} arrayToys={arrayToys} goToPage={goToPage} />);
     }
     return (
         <Container fixed className="container" maxWidth="lg">
@@ -45,13 +25,16 @@ export default function HomeView({ loading, arrayToys, goToPage }) {
                     spacing={3}
                     alignItems="center"
                 >
-                    <Grid item lg={6} xl={6} className="titlePage">
+                    <Grid item md={6} lg={6} xl={6} className="titlePage">
                         <Typography variant="h1" >
                             Base de Brinquedos
                         </Typography>
                     </Grid>
-                    <Grid item lg={6} xl={6} className="titleButton">
+                    <Grid item md={6} lg={6} xl={6} className="titleButton">
                         <Button variant='primary' className='buttonClass'>Cadastrar brinquedo</Button>
+                    </Grid>
+                    <Grid item md={12} lg={12} xl={12} className="titleButton">
+                        <TopCards />
                     </Grid>
                     {infoBox}
 
