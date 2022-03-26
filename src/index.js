@@ -2,11 +2,16 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
-import HomeController from './Screens/Home/HomeController';
+import LoginController from './Screens/Login/LoginController';
+import MuiThemes from './Utils/Common/MuiThemes';
+
+
 
 ReactDOM.render(
   <React.StrictMode>
-    <HomeController />
+    <MuiThemes>
+      <LoginController />
+    </MuiThemes>
   </React.StrictMode>,
   document.getElementById('root')
 );
