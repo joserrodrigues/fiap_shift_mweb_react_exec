@@ -44,7 +44,7 @@ const BootstrapInput = styled(InputBase)(({ theme, error }) => {
 });
 
 
-const CustomInput = ({ label, errorMessage, onChange, defaultValue, placeholder, hasError, type, disabled }) => {
+const CustomInput = ({ label, errorMessage, onChange, defaultValue, placeholder, hasError, type, disabled, value }) => {
 
     let colorLabel = "";
     if (hasError) {
@@ -59,6 +59,7 @@ const CustomInput = ({ label, errorMessage, onChange, defaultValue, placeholder,
                 </InputLabel>
                 <BootstrapInput
                     defaultValue={defaultValue}
+                    value={value}
                     error={hasError}
                     disabled={disabled}
                     id="bootstrap-input"
