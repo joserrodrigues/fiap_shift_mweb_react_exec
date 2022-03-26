@@ -1,9 +1,26 @@
-
-.boxContador{
-  text-align: center;
+.titlePage{
+  text-align: left;
 }
 
-.buttonHome{
-  width: 100px !important;
-  margin: 15px !important;
+.titleButton{
+  text-align: right;
+}
+
+.buttonClass{
+  width: 220px !important;
+}
+
+.itemClass{
+  text-align: center;
+  cursor: pointer;
+}
+
+.cardClass {
+  max-width: 345px !important;
+  border-radius: 20px !important;
+}
+
+.titleCard{
+  font-weight: bold !important;
+  min-height: 40px;
 }

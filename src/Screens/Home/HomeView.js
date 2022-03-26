@@ -1,43 +1,62 @@
-import { Container, Typography, Box, Button } from '@mui/material';
-import React from 'react';
-import './Home.css';
+import * as React from 'react';
+import './Home.css'
+import { Box, Container, CircularProgress, Grid, Typography, Button } from '@mui/material';
+import { Card, CardContent, CardMedia } from '@mui/material';
+import CardInfo from '../../Components/CardInfo/CardInfo'
 
-function HomeView({ count, runStatus, onClickStart, onClickStop, onClickErase }) {
+export default function HomeView({ loading, arrayToys, goToPage }) {
 
-    let variantStart = 'primary';
-    let labelStart = 'Iniciar';
-    let variantStop = 'primary';
-    let variantErase = 'primary';
-    if (runStatus === 0) {
-        variantStart = 'primary';
-        labelStart = 'Iniciar';
-        variantStop = 'disabled';
-        variantErase = 'disabled';
-    } else if (runStatus === 1) {
-        variantStart = 'primary';
-        labelStart = 'Pausar';
-        variantStop = 'primary';
-        variantErase = 'primary';
-    } else if (runStatus === 2) {
-        variantStart = 'primary';
-        labelStart = 'Iniciar';
-        variantStop = 'disabled';
-        variantErase = 'disabled';
-    } else if (runStatus === 3) {
-        variantStart = 'primary';
-        labelStart = 'Despausar';
-        variantStop = 'disabled';
-        variantErase = 'primary';
+    let infoBox = [];
+
+    if (loading) {
+        infoBox.push(
+            <Grid key={1} item lg={12} xl={12} className="itemClass">
+                <CircularProgress />
+            </Grid>
+
+        )
+    } else if (arrayToys) {
+        arrayToys.toys.forEach(toy => {
+            infoBox.push(
+                <Grid key={toy._id} item sm={12} md={6} lg={2} xl={2} className="itemClass" onClick={() => goToPage(toy)}>
+                    <Card className='cardClass'>
+                        <CardMedia
+                            component="img"
+                            height="140"
+                            src={toy.mainImage}
+                            alt={toy.name}
+                        />
+                        <CardContent>
+                            <Typography gutterBottom variant="body2" component="div" className='titleCard'>
+                                {toy.name}
+                            </Typography>
+                            <CardInfo />
+                        </CardContent>
+                    </Card>
+                </Grid>
+            )
+        });
     }
     return (
-        <Container>
-            <Box className="boxContador">
-                <Typography variant='h1'>Contador - {count} </Typography>
-                <Button variant={variantStart} className='buttonHome' onClick={onClickStart}>{labelStart}</Button>
-                <Button variant={variantStop} className='buttonHome' onClick={onClickStop}>Parar</Button>
-                <Button variant={variantErase} className='buttonHome' onClick={onClickErase}>Zerar</Button>
+        <Container fixed className="container" maxWidth="lg">
+            <Box className="contentBox">
+                <Grid
+                    container
+                    spacing={3}
+                    alignItems="center"
+                >
+                    <Grid item lg={6} xl={6} className="titlePage">
+                        <Typography variant="h1" >
+                            Base de Brinquedos
+                        </Typography>
+                    </Grid>
+                    <Grid item lg={6} xl={6} className="titleButton">
+                        <Button variant='primary' className='buttonClass'>Cadastrar brinquedo</Button>
+                    </Grid>
+                    {infoBox}
+
+                </Grid>
             </Box>
         </Container>
     );
 }
-export default HomeView;

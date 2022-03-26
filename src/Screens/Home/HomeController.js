@@ -1,54 +1,44 @@
-import React, { useState, useEffect, useRef } from 'react';
-import HomeView from './HomeView'
+import React, { useEffect, useRef } from 'react';
+import useAPI from '../../Services/APIs/Common/useAPI';
+import toys from '../../Services/APIs/Toys/toys';
+import HomeView from './HomeView';
+import { useNavigate } from "react-router-dom";
+import { geolocated } from "react-geolocated";
 
-const HomeController = () => {
+const HomeController = ({ coords, isGeolocationAvailable, isGeolocationEnabled }) => {
 
-    const [runStatus, setRunStatus] = useState(0);
-    const [count, setCount] = useState(0);
-    const interval = useRef(null);
+    const getToysGetAPI = useAPI(toys.getAllToys);
+    const navigate = useNavigate();
+    const userCoordinates = useRef(null);
+
+    if (isGeolocationAvailable &&
+        isGeolocationEnabled && coords !== null && coords !== undefined) {
+        console.log(coords.latitude + " - " + coords.longitude);
+        userCoordinates.current = coords;
+    }
 
     useEffect(() => {
+        getToysGetAPI.request(1);
+    }, []);
 
-        return () => {
-            if (interval.current) {
-                clearInterval(interval.current);
+    console.log(userCoordinates);
+    const goToPage = (toy) => {
+
+        navigate("/detail/" + toy._id, {
+            state: {
+                toy: JSON.stringify(toy),
+                latitude: userCoordinates.current ? userCoordinates.current.latitude : 0,
+                longitude: userCoordinates.current ? userCoordinates.current.longitude : 0
             }
-        }
-    }, [])
-
-    const onClickStart = () => {
-        if (interval.current) {
-            clearInterval(interval.current);
-        }
-
-        if (runStatus === 1) {
-            setRunStatus(3);
-        } else {
-            setRunStatus(1);
-            interval.current = setInterval(() => {
-                setCount(count => count + 1);
-            }, 1000);
-        }
+        })
     }
 
-    const onClickStop = () => {
-        clearInterval(interval.current);
-        setRunStatus(2);
-        setCount(0);
-    }
-
-    const onClickErase = () => {
-        setCount(0);
-    }
-
-    return (
-        <HomeView
-            runStatus={runStatus}
-            count={count}
-            onClickStart={onClickStart}
-            onClickStop={onClickStop}
-            onClickErase={onClickErase}
-        /> //Chamando o View
-    )
+    console.log(getToysGetAPI.data)
+    return <HomeView arrayToys={getToysGetAPI.data} loading={getToysGetAPI.loading} goToPage={goToPage} />
 }
-export default HomeController;
+export default geolocated({
+    positionOptions: {
+        enableHighAccuracy: false,
+    },
+    userDecisionTimeout: 5000,
+})(HomeController);
