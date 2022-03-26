@@ -1,23 +1,15 @@
 import * as React from 'react';
 import './Home.css'
-import { Box, Container, CircularProgress, Grid, Typography, Button } from '@mui/material';
-import ItemsView from '../../Components/ItemsView/ItemsView';
-import TopCards from '../../Components/TopCards/TopCards';
+import { Box, Container, Grid, Typography } from '@mui/material';
 import Header from '../../Components/Header/Header';
 
-export default function HomeView({ loading, arrayToys, goToPage }) {
+import ToysTableView from '../../Components/ToysTableView/ToysTableView';
+import ToysCardsView from '../../Components/ToysCardsView/ToysCardsView';
+import ToysTopList from '../../Components/ToysTopList/ToysTopList';
+import renderIf from 'render-if';
 
-    let infoBox = [];
+export default function HomeView({ loading, arrayToys, goToPage, info, getDataPage, viewType, onChangeViewType, addToy }) {
 
-    if (loading) {
-        infoBox.push(
-            <Grid key={1} item lg={12} xl={12} className="itemClass">
-                <CircularProgress />
-            </Grid>
-        )
-    } else if (arrayToys) {
-        infoBox.push(<ItemsView key={2} arrayToys={arrayToys} goToPage={goToPage} />);
-    }
     return (
         <Container fixed className="container" maxWidth="lg">
             <Header />
@@ -27,19 +19,21 @@ export default function HomeView({ loading, arrayToys, goToPage }) {
                     spacing={3}
                     alignItems="center"
                 >
-                    <Grid item md={6} lg={6} xl={6} className="titlePage">
+                    <Grid item lg={12} xl={12} className="titlePage">
                         <Typography variant="h1" >
-                            Base de Brinquedos
+                            Base de Brinquedos - {info}
                         </Typography>
                     </Grid>
-                    <Grid item md={6} lg={6} xl={6} className="titleButton">
-                        <Button variant='primary' className='buttonClass'>Cadastrar brinquedo</Button>
-                    </Grid>
-                    <Grid item md={12} lg={12} xl={12} className="titleButton">
-                        <TopCards />
-                    </Grid>
-                    {infoBox}
+                    <ToysTopList onChangeView={onChangeViewType} viewType={viewType} addToy={addToy} />
 
+                    <Grid item lg={12} xl={12} >
+                        {renderIf(viewType === "cards")(
+                            <ToysCardsView loading={loading} arrayToys={arrayToys} goToPage={goToPage} />
+                        )}
+                        {renderIf(viewType === "table")(
+                            <ToysTableView loading={loading} goToPage={goToPage} getDataPage={getDataPage} />
+                        )}
+                    </Grid>
                 </Grid>
             </Box>
         </Container>
