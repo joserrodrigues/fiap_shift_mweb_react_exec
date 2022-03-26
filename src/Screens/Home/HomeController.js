@@ -1,77 +1,54 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import HomeView from './HomeView'
-import HomeModel from './HomeModel'
 
-class HomeController extends React.Component {
+const HomeController = () => {
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            runStatus: 0,
-            count: 0
-        }
-    }
+    const [runStatus, setRunStatus] = useState(0);
+    const [count, setCount] = useState(0);
+    const interval = useRef(null);
 
-    componentDidMount() {
-        console.log(" Chamando componentDidMount ");
-    }
+    useEffect(() => {
 
-    componentWillUnmount() {
-        clearInterval(this.interval)
-        console.log(" Chamando componentWillUnmount ");
-    }
-    onClickStart = () => {
-
-        if (this.state.runStatus === 1) {
-            this.setState({
-                runStatus: 3
-            })
-        } else {
-            if (this.interval) {
-                clearInterval(this.interval);
+        return () => {
+            if (interval.current) {
+                clearInterval(interval.current);
             }
+        }
+    }, [])
 
-            this.setState({
-                runStatus: 1
-            })
-            //Inicializando o timeout
-            this.interval = setInterval(() => {
-                //atualizando o contador
-                console.log(" Atualizando a classe ");
-                if (this.state.runStatus === 1) {
-                    this.setState({
-                        count: this.state.count + 1
-                    })
-                }
+    const onClickStart = () => {
+        if (interval.current) {
+            clearInterval(interval.current);
+        }
+
+        if (runStatus === 1) {
+            setRunStatus(3);
+        } else {
+            setRunStatus(1);
+            interval.current = setInterval(() => {
+                setCount(count => count + 1);
             }, 1000);
         }
     }
 
-
-    onClickStop = () => {
-        clearInterval(this.interval);
-        this.setState({
-            runStatus: 2,
-            count: 0
-        })
+    const onClickStop = () => {
+        clearInterval(interval.current);
+        setRunStatus(2);
+        setCount(0);
     }
 
-    onClickErase = () => {
-        this.setState({
-            count: 0
-        })
+    const onClickErase = () => {
+        setCount(0);
     }
 
-    render() {
-        return (
-            <HomeView
-                runStatus={this.state.runStatus}
-                count={this.state.count}
-                onClickStart={this.onClickStart}
-                onClickStop={this.onClickStop}
-                onClickErase={this.onClickErase}
-            /> //Chamando o View
-        )
-    }
+    return (
+        <HomeView
+            runStatus={runStatus}
+            count={count}
+            onClickStart={onClickStart}
+            onClickStop={onClickStop}
+            onClickErase={onClickErase}
+        /> //Chamando o View
+    )
 }
 export default HomeController;
